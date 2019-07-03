@@ -51,12 +51,29 @@ loader.load(
         cube.position.z = 2;
         scene.add(cube, plane, sLight);
 
+        // Define Tweens
+        console.log(cube.position)
+        posTween = new TWEEN.Tween(cube.position)
+            .to({ y: 0, z: 5 }, 5000)
+            .delay(1000)
+            .easing(TWEEN.Easing.Cubic.Out)
+            .repeat(10)
+            .start();
+            console.log(cube.rotation)
+        rotTween = new TWEEN.Tween(cube.rotation)
+            .to({ x:-Math.PI/2,y:-Math.PI/2 }, 5000)
+            .delay(1000)
+            .easing(TWEEN.Easing.Cubic.Out)
+            .repeat(10)
+            .start();
+            
         (function animate() {
             requestAnimationFrame(animate);
             renderer.render(scene, camera);
             //Rotate Cube
-            cube.rotation.x += .005;
-            cube.rotation.y += .005;
+            TWEEN.update();
+            // cube.rotation.x += .005;
+            // cube.rotation.y += .005;
         })();
     }
 );
