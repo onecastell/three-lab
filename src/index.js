@@ -8,7 +8,7 @@ let scene = new THREE.Scene();
 // Camera
 let camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 500);
 camera.lookAt(0, 0, 0);
-camera.position.z = 8;
+camera.position.z = 5;
 // Renderer
 let renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight)
@@ -29,7 +29,7 @@ const cubeGeometry = new THREE.BoxGeometry(1, 1, 1, 16, 16, 16);
 let dlight = new THREE.DirectionalLight(0xffffff, 1.5);
 dlight.position.set(0, 0, 6);
 let sLight = new THREE.SpotLight(0xffffff, 1.5);
-sLight.position.set(0, 0, 1);
+// sLight.position.set(0, 8, 0);
 sLight.position.set(2, 8, 15);
 sLight.target.position.set(-2, 0, -2);
 sLight.castShadow = true;
@@ -41,11 +41,11 @@ sLight.shadow.mapSize.width = 4000;
 sLight.shadow.mapSize.height = 4000;
 
 //Textures
-const cubeTexture = new THREE.TextureLoader().load('../assets/textures/abstract.jpg');
+const cubeTexture = new THREE.TextureLoader().load('../assets/textures/tripoint.bmp');
 const planeTexture = new THREE.TextureLoader().load('../assets/textures/plane.jpg');
 // Materials
-// const cubeMaterial = new THREE.MeshPhongMaterial({ map: cubeTexture });
-const cubeMaterial = new THREE.MeshNormalMaterial({ wireframe: true })
+const cubeMaterial = new THREE.MeshPhongMaterial({ map: cubeTexture });
+// const cubeMaterial = new THREE.MeshNormalMaterial({ wireframe: true })
 const planeMaterial = new THREE.MeshPhongMaterial({ map: planeTexture, side: THREE.DoubleSide })
 
 let plane = new THREE.Mesh(planeGeometry, planeMaterial)
@@ -57,7 +57,7 @@ cube.castShadow = true;
 cube.receiveShadow = false;
 cube.rotation.x = 5;
 cube.position.y = 1;
-cube.position.z = 2;
+cube.position.z = 0;
 
 // Add to scene
 scene.add(cube, plane, sLight);
@@ -85,14 +85,6 @@ let i = 0;
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
         // TWEEN.update();
-        // for (let i = 0; i < 4; i += .00001) {
-        //     quaternion.setFromAxisAngle(
-        //         vec, i
-        //     )
-        // }
-
-        
-
             console.log(cubeGeometry.vertices[0].x)
 
             for(let vertex in cubeGeometry.vertices){
@@ -105,6 +97,6 @@ let i = 0;
                 )
                 cubeGeometry.vertices[vertex].applyQuaternion(quaternion)
             }
-            cubeGeometry.verticesNeedUpdate = true;
+            // cubeGeometry.verticesNeedUpdate = true;
    
     })();
