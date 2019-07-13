@@ -13,8 +13,8 @@ camera.position.z = 8;
 let renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight)
 // Enable Shadows
-renderer.shadowMapEnabled = true;
-renderer.shadowMapType = THREE.PCFSoftShadowMap;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 // renderer.compile(scene,camera)
 
 // Orbit Controls
@@ -23,7 +23,7 @@ controls.update();
 
 // Geometries
 const planeGeometry = new THREE.PlaneGeometry(15, 15, 32);
-const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+const cubeGeometry = new THREE.BoxGeometry(1, 1, 1, 16, 16, 16);
 
 // Lights and Shadows
 let dlight = new THREE.DirectionalLight(0xffffff, 1.5);
@@ -33,18 +33,19 @@ sLight.position.set(0, 0, 1);
 sLight.position.set(2, 8, 15);
 sLight.target.position.set(-2, 0, -2);
 sLight.castShadow = true;
-sLight.shadowCameraNear = 1;
-sLight.shadowCameraFar = 200;
-sLight.shadowCameraFov = 45;
-sLight.shadowDarkness = 0.5;
-sLight.shadowMapWidth = 4000;
-sLight.shadowMapHeight = 4000;
+sLight.shadow.camera.near = 1;
+sLight.shadow.camera.far = 200;
+sLight.shadow.camera.fov = 45;
+// sLight.shadowDarkness = 0.5;
+sLight.shadow.mapSize.width = 4000;
+sLight.shadow.mapSize.height = 4000;
 
 //Textures
 const cubeTexture = new THREE.TextureLoader().load('../assets/textures/abstract.jpg');
 const planeTexture = new THREE.TextureLoader().load('../assets/textures/plane.jpg');
 // Materials
-const cubeMaterial = new THREE.MeshPhongMaterial({ map: cubeTexture });
+// const cubeMaterial = new THREE.MeshPhongMaterial({ map: cubeTexture });
+const cubeMaterial = new THREE.MeshNormalMaterial({ wireframe: true })
 const planeMaterial = new THREE.MeshPhongMaterial({ map: planeTexture, side: THREE.DoubleSide })
 
 let plane = new THREE.Mesh(planeGeometry, planeMaterial)
@@ -55,8 +56,8 @@ let cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
 cube.castShadow = true;
 cube.receiveShadow = false;
 cube.rotation.x = 5;
-cube.position.y = 2;
-cube.position.z = 0;
+cube.position.y = 1;
+cube.position.z = 2;
 
 // Add to scene
 scene.add(cube, plane, sLight);
@@ -68,14 +69,42 @@ let posTween = new TWEEN.Tween(cube.position)
     .easing(TWEEN.Easing.Bounce.Out)
     .start();
 let rotTween = new TWEEN.Tween(cube.rotation)
-    .to({ z:2*Math.PI }, 2500)
+    .to({ z: 2 * Math.PI }, 2500)
     .delay(1000)
     .easing(TWEEN.Easing.Cubic.Out)
     .start();
 
-// Animate
-; (function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-    TWEEN.update();
-})();
+// Twist motion quaternion
+const quaternion = new THREE.Quaternion()
+console.log(cubeGeometry.vertices.length)
+const vec = new THREE.Vector3(0, 0, 1)
+const to = 3
+let i = 0;
+    // Animate
+    ; (function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+        // TWEEN.update();
+        // for (let i = 0; i < 4; i += .00001) {
+        //     quaternion.setFromAxisAngle(
+        //         vec, i
+        //     )
+        // }
+
+        
+
+            console.log(cubeGeometry.vertices[0].x)
+
+            for(let vertex in cubeGeometry.vertices){
+                var velocity = Math.PI/45 * cubeGeometry.vertices[vertex].z
+                if(cubeGeometry.vertices[0].x < -.5){
+                   velocity = Math.PI/5 * .15
+                }
+                quaternion.setFromAxisAngle(
+                    vec, velocity
+                )
+                cubeGeometry.vertices[vertex].applyQuaternion(quaternion)
+            }
+            cubeGeometry.verticesNeedUpdate = true;
+   
+    })();
