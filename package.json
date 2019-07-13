@@ -1,14 +1,14 @@
 {
   "name": "three-lab",
   "version": "1.0.0",
-  "description": "",
+  "description": "Experiments with webGL",
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode=production",
-    "serve": "webpack-dev-server --open"
+    "serve": "webpack-dev-server"
   },
   "keywords": [],
-  "author": "",
+  "author": "Franklin Castellanos",
   "license": "ISC",
   "devDependencies": {
     "@tweenjs/tween.js": "^17.4.0",
