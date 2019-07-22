@@ -3,7 +3,7 @@ var HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin')
 var path = require('path')
 
 module.exports = {
-    entry: './src/sphere.js',
+    entry: './src/loader.js',
     output: {
         path: path.resolve(__dirname, './dist'),
         filename: 'main.js'

@@ -63,11 +63,11 @@ cube.position.z = 0;
 scene.add(cube, plane, sLight);
 
 // Tweens
-let posTween = new TWEEN.Tween(cube.position)
-    .to({ y: .52 }, 2500)
-    .delay(1000)
-    .easing(TWEEN.Easing.Bounce.Out)
-    .start();
+// let posTween = new TWEEN.Tween(cube.position)
+//     .to({ y: .52 }, 2500)
+//     .delay(1000)
+//     .easing(TWEEN.Easing.Bounce.Out)
+//     .start();
 let rotTween = new TWEEN.Tween(cube.rotation)
     .to({ z: 2 * Math.PI }, 2500)
     .delay(1000)
