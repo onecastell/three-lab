@@ -30,6 +30,19 @@ for (let i = -bounds; i <= bounds; i++) {
     verticals.push(new line([i, 0, -bounds], [i, 0, bounds]))
 }
 
+// Grid pan animation
+const grid = new THREE.Group()
+new TWEEN.Tween(grid.rotation)
+    .to({ x: Math.PI / 10, y: 2, }, 1500)
+    .easing(TWEEN.Easing.Quadratic.InOut)
+    .delay(1000)
+    .start()
+new TWEEN.Tween(grid.position)
+    .to({ x: 3, z: 6, }, 1000)
+    .easing(TWEEN.Easing.Quadratic.In)
+    .delay(1500)
+    .start()
+
 // Jets
 import { jet, moveJet } from '../objects/jet'
 const jet1 = new jet(-5, 1, 4)
@@ -40,8 +53,9 @@ moveJet(jet1, [7, 0, -7])
 moveJet(jet2, [7, 0, -7])
 moveJet(jet3, [7, 0, -7])
 
-scene.add(jet1, jet2, jet3)
-scene.add(...horizontals, ...verticals)
+
+grid.add(jet1, jet2, jet3, ...horizontals, ...verticals)
+scene.add(grid)
 
 // LIGHTS
 const lights = []
@@ -49,7 +63,14 @@ const lights = []
 // CAMERA
 const camera = new THREE.PerspectiveCamera(60, width / height, 1, 500)
 camera.lookAt(0, 0, 0)
-camera.position.set(6.2, Math.PI / .4, 8.5)
+camera.position.set(0, Math.PI / .5, 12)
+
+// Camera zoom animation
+new TWEEN.Tween(camera.position)
+    .to({ x: -1, y: 3, z: 9 }, 2000)
+    .easing(TWEEN.Easing.Quadratic.Out)
+    .delay(1000)
+    .start()
 
 // ACTION
 const canvas = document.querySelector('canvas')

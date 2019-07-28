@@ -39,8 +39,8 @@ class jet {
     move(obj, to) {
         const [x, y, z] = [...to]
         const tween = new TWEEN.Tween(obj.position)
-            .to({ x: x, y: y, z: z }, 2500)
-            .easing(TWEEN.Easing.Quartic.In)
+            .to({ x: x, y: y, z: z }, 3000)
+            .easing(TWEEN.Easing.Quadratic.InOut)
             // .repeat(Infinity)
             .start();
         return tween
