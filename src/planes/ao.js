@@ -30,6 +30,10 @@ for (let i = -bounds; i <= bounds; i++) {
     verticals.push(new line([i, 0, -bounds], [i, 0, bounds]))
 }
 
+// Jets
+import { jet } from '../objects/jet'
+scene.add(jet)
+
 scene.add(...horizontals, ...verticals)
 
 // LIGHTS
@@ -38,7 +42,7 @@ const lights = []
 // CAMERA
 const camera = new THREE.PerspectiveCamera(60, width / height, 1, 500)
 camera.lookAt(0, 0, 0)
-camera.position.set(6.2, Math.PI / 1.5, 7.5)
+camera.position.set(6.2, Math.PI / .4, 8.5)
 
 // ACTION
 const canvas = document.querySelector('canvas')
