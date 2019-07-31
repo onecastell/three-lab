@@ -24,23 +24,36 @@ let verticals = []
 
 // Generate Grid
 for (let i = -bounds; i <= bounds; i++) {
-    horizontals.push(new line([-bounds, 0, i], [bounds, 0, i]))
+    const xLine = new line([-bounds, 0, i], [bounds, 0, i])
+    xLine.scale.set( 0.0001,1,1)
+    new TWEEN.Tween(xLine.scale)
+    .to({ x:1 },250* Math.abs(i))
+    .easing(TWEEN.Easing.Quadratic.In)
+    .start()
+    horizontals.push(xLine)
 }
 for (let i = -bounds; i <= bounds; i++) {
-    verticals.push(new line([i, 0, -bounds], [i, 0, bounds]))
+    const yLine = new line([i, 0, -bounds], [i, 0, bounds])
+    yLine.scale.set( 0.0001,1,1)
+    new TWEEN.Tween(yLine.scale)
+    .to({ x:1 }, 250 * Math.abs(i))
+    .easing(TWEEN.Easing.Quadratic.In)
+    .start()
+    verticals.push(yLine)
 }
 
 // Grid pan animation
 const grid = new THREE.Group()
+
 new TWEEN.Tween(grid.rotation)
     .to({ x: Math.PI / 10, y: 2, }, 1500)
     .easing(TWEEN.Easing.Quadratic.InOut)
-    .delay(1000)
+    .delay(2000)
     .start()
 new TWEEN.Tween(grid.position)
     .to({ x: 3, z: 6, }, 1000)
     .easing(TWEEN.Easing.Quadratic.In)
-    .delay(1500)
+    .delay(3000)
     .start()
 
 // Jets
@@ -52,7 +65,6 @@ const jet3 = new jet(-4, 1, 5)
 moveJet(jet1, [7, 0, -7])
 moveJet(jet2, [7, 0, -7])
 moveJet(jet3, [7, 0, -7])
-
 
 grid.add(jet1, jet2, jet3, ...horizontals, ...verticals)
 scene.add(grid)
@@ -67,8 +79,8 @@ camera.position.set(0, Math.PI / .5, 12)
 
 // Camera zoom animation
 new TWEEN.Tween(camera.position)
-    .to({ x: -1, y: 3, z: 9 }, 2000)
-    .easing(TWEEN.Easing.Quadratic.Out)
+    .to({ x: -1, y: 3, z: 9 }, 1000)
+    .easing(TWEEN.Easing.Quadratic.InOut)
     .delay(1000)
     .start()
 

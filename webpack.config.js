@@ -3,7 +3,7 @@ var HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin')
 var path = require('path')
 
 module.exports = {
-    entry: './src/planes/ao.js',
+    entry: './src/planes/platform.js',
     output: {
         path: path.resolve(__dirname, './dist'),
         filename: 'main.js'

@@ -41,7 +41,7 @@ class jet {
         const tween = new TWEEN.Tween(obj.position)
             .to({ x: x, y: y, z: z }, 3000)
             .easing(TWEEN.Easing.Quadratic.InOut)
-            // .repeat(Infinity)
+            .delay(1500)
             .start();
         return tween
     }
