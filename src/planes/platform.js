@@ -44,12 +44,12 @@ dirLightAbove.castShadow = true
 dirLightAbove.position.set(0, 2, 0);
 scene.add(ambientLight)
 
-const spotligt = new THREE.SpotLight(0x707070,1)
+const spotligt = new THREE.SpotLight(0x707070, 1.5)
 spotligt.castShadow = true
-spotligt.position.set(-6,5,0)
-spotligt.angle = Math.PI/1.8
-spotligt.shadow.mapSize.width = 4000;
-spotligt.shadow.mapSize.height = 4000;
+spotligt.position.set(-6, 5, 0)
+spotligt.angle = Math.PI / 1.8
+spotligt.shadow.mapSize.width = 8000;
+spotligt.shadow.mapSize.height = 8000;
 
 scene.add(spotligt)
 
@@ -97,9 +97,9 @@ const moveCamera = direction => {
         //Tween Spotlight
 
         new TWEEN.Tween(spotligt.position)
-        .to({ x: index }, 250)
-        .easing(TWEEN.Easing.Quadratic.InOut)
-        .start()
+            .to({ x: index }, 250)
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .start()
         cameraIndex = index
     }
 }

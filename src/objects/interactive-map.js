@@ -3,26 +3,44 @@ const TWEEN = require('@tweenjs/tween.js')
 class map {
     constructor() {
 
-        // Building object geometry
+        // Building object
         const color = 0xbada55
-        const geometry = new THREE.BoxGeometry(.5, .5, .5)
-        const material = new THREE.MeshPhongMaterial({ color: color })
-        // const material = new THREE.MeshBasicMaterial({wireframe:true})
+        const buildingGeometry = new THREE.BoxGeometry(.5, .5, .5)
+        // const buildingMaterial = new THREE.MeshPhongMaterial({ color: color })
+        const buildingMaterial = new THREE.MeshBasicMaterial({ wireframe: true })
         let buildings = []
         // Path clearing indexes
-        const path = [{ x: -4.003999999999998, y: 1.996 }]
+        const path = [
+            // Move Up
+            { x: -5.336, y: 1.996 },
+            { x: -5.336, y: 1.330 },
+            { x: -5.336, y: 0.664 },
+            // Turn Left
+            { x: -6.002, y: 0.664 },
+            { x: -6.668, y: 0.664 },
+            // Move Up
+            { x: -6.668, y: -0.002 },
+            { x: -6.668, y: -0.668 },
+            { x: -6.668, y: -1.334 },
+            // Turn Right
+            { x: -6.002, y: -1.334 },
+            { x: -5.336, y: -1.334 },
+            { x: -4.670, y: -1.334 },
+            //Move Up
+            { x: -4.670, y: -2.000 },
+        ]
         // Checks if x and y map to a path coordinate
-        const checkXY = (x, y) => {
-            return !!path.filter((p => p.x.toFixed(3) == x && p.y.toFixed(3) == y)).length
+        const interectsPath = (x, y) => {
+            return !!path.filter((p => p.x == x.toFixed(3) && p.y == y.toFixed(3))).length
         }
-        console.log(checkXY(-4.004, 1.996))
+        // console.log(interectsPath(-4.004, 1.996))
         for (let xIndex = -8; xIndex < -4; xIndex += .666) {
             // note:center -6
-
             for (let yIndex = -2; yIndex < 2; yIndex += .666) {
-                // console.log(xIndex,yIndex)
-                if (path.includes(yIndex) === false) {
-                    const building = new THREE.Mesh(geometry, material)
+                // console.log(`{x:${xIndex.toFixed(3)}, y:${yIndex.toFixed(3)}},`)
+                // console.log('break')
+                if (!interectsPath(xIndex, yIndex)) {
+                    const building = new THREE.Mesh(buildingGeometry, buildingMaterial)
                     building.rotation.x = Math.PI / 2
                     building.position.set(xIndex, .5, yIndex)
                     building.castShadow = true
@@ -40,8 +58,22 @@ class map {
             }
         }
 
+        // Path object
+        const pathGeometry = new THREE.Geometry()
+        const pathMaterial = new THREE.LineDashedMaterial({
+            color: 0x00ff00, scale: 5,
+            dashSize: 1,
+            gapSize: .5,
+        })
+        pathGeometry.vertices.push(
+            new THREE.Vector3(-5.336, .55, 1.996),
+            new THREE.Vector3(-5.336, .55, 0.664),
+        )
+        const line = new THREE.Line(pathGeometry, pathMaterial)
+        line.computeLineDistances(pathGeometry)
+        // line.scale.set(1,1,1)
         const group = new THREE.Group()
-        group.add(...buildings)
+        group.add(...buildings, line)
         this.group = group
         return this.group
     }
