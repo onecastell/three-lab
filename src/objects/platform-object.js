@@ -5,14 +5,12 @@ class object {
     constructor(position) {
         const color = 0xb5b5b5
         const geometry = new THREE.BoxGeometry(5, 5, .1)
-        const material = new THREE.MeshPhongMaterial({ color: color, side: THREE.DoubleSide })
-
+        const material = new THREE.MeshPhongMaterial({ color: color })
         const base = new THREE.Mesh(geometry, material)
         base.rotation.x = Math.PI / 2
         base.position.set(position, .2, 0)
-
         base.castShadow = true
-        base.receiveShadow = false
+        base.receiveShadow = true
         const group = new THREE.Group()
         group.add(base)
         this.group = group

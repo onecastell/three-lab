@@ -31,21 +31,32 @@ scene.add(platform)
 
 // Platform Objects
 import { object } from "../objects/platform-object";
-scene.add(new object(-6, 0, 0))
+import { map } from "../objects/interactive-map"
+scene.add(new object(-6, 0, 0).add(new map()))
 scene.add(new object(0, 0, 0))
 scene.add(new object(6, 0, 0))
 
 // LIGHTS
+// var ambientLight = new THREE.AmbientLight(0x707070);
 var ambientLight = new THREE.AmbientLight(0x707070);
 let dirLightAbove = new THREE.DirectionalLight(0xffffff, .5)
 dirLightAbove.castShadow = true
 dirLightAbove.position.set(0, 2, 0);
-scene.add(dirLightAbove, ambientLight)
+scene.add(ambientLight)
+
+const spotligt = new THREE.SpotLight(0x707070,1)
+spotligt.castShadow = true
+spotligt.position.set(-6,5,0)
+spotligt.angle = Math.PI/1.8
+spotligt.shadow.mapSize.width = 4000;
+spotligt.shadow.mapSize.height = 4000;
+
+scene.add(spotligt)
 
 // CAMERA
 const camera = new THREE.PerspectiveCamera(60, width / height, 1, 500)
 camera.lookAt(0, 0, 0)
-camera.position.set(-6, 5, 10)
+camera.position.set(-6, 6, 10)
 camera.rotation.set(-Math.PI / 8, 0, 0)
 let cameraIndex = -6;
 // Camera movement on keypress handler
@@ -83,6 +94,12 @@ const moveCamera = direction => {
             .to({ x: index }, 500)
             .easing(TWEEN.Easing.Quadratic.InOut)
             .start()
+        //Tween Spotlight
+
+        new TWEEN.Tween(spotligt.position)
+        .to({ x: index }, 250)
+        .easing(TWEEN.Easing.Quadratic.InOut)
+        .start()
         cameraIndex = index
     }
 }
