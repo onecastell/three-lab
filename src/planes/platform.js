@@ -20,9 +20,8 @@ document.onkeydown = event => {
     }
 }
 
-const globalRotation = Math.PI / 1.5
 // Platform
-const platformGoemetry = new THREE.PlaneGeometry(25, 8)
+const platformGoemetry = new THREE.PlaneGeometry(20, 8)
 const platformMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, side: THREE.DoubleSide })
 const platform = new THREE.Mesh(platformGoemetry, platformMaterial)
 platform.rotation.x = Math.PI / 2
@@ -32,7 +31,9 @@ scene.add(platform)
 
 // Platform Objects
 import { object } from "../objects/platform-object";
+scene.add(new object(-6, 0, 0))
 scene.add(new object(0, 0, 0))
+scene.add(new object(6, 0, 0))
 
 // LIGHTS
 var ambientLight = new THREE.AmbientLight(0x707070);
@@ -44,24 +45,16 @@ scene.add(dirLightAbove, ambientLight)
 // CAMERA
 const camera = new THREE.PerspectiveCamera(60, width / height, 1, 500)
 camera.lookAt(0, 0, 0)
-// camera.position.set(0, Math.PI / .5, 12)
-camera.position.set(0, 5, 10)
+camera.position.set(-6, 5, 10)
 camera.rotation.set(-Math.PI / 8, 0, 0)
-// Camera zoom animation
-new TWEEN.Tween(camera.position)
-    .to({ x: -1, y: 3, z: 9 }, 1000)
-    .easing(TWEEN.Easing.Quadratic.InOut)
-    .delay(1000)
-// .start()
-
+let cameraIndex = -6;
 // Camera movement on keypress handler
 const moveCamera = direction => {
-    //Get current camera x value
-    let cameraTo
+    let index = cameraIndex
     switch (direction) {
-        case 'left': cameraTo = -5
+        case 'left': index -= 6
             break
-        case 'right': cameraTo = 5
+        case 'right': index += 6
             break
         case 'up':
             new TWEEN.Tween(camera.position)
@@ -85,14 +78,12 @@ const moveCamera = direction => {
             break
     }
 
-    const bounds = 10
-    const cX = camera.position.x
-    // console.log(cX)
-    if (cX + cameraTo <= 10 && cX + cameraTo >= -10) {
+    if (index <= 10 && index >= -10) {
         new TWEEN.Tween(camera.position)
-            .to({ x: cX + cameraTo }, 500)
+            .to({ x: index }, 500)
             .easing(TWEEN.Easing.Quadratic.InOut)
             .start()
+        cameraIndex = index
     }
 }
 // ACTION
