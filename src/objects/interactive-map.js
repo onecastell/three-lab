@@ -1,13 +1,14 @@
 const THREE = require('three')
 const TWEEN = require('@tweenjs/tween.js')
+const ARROW = require('../objects/arrow')
 class map {
     constructor() {
 
         // Building object
         const color = 0xbada55
         const buildingGeometry = new THREE.BoxGeometry(.5, .5, .5)
-        // const buildingMaterial = new THREE.MeshPhongMaterial({ color: color })
-        const buildingMaterial = new THREE.MeshBasicMaterial({ wireframe: true })
+        const buildingMaterial = new THREE.MeshPhongMaterial({ color: color })
+        // const buildingMaterial = new THREE.MeshBasicMaterial({ wireframe: true })
         let buildings = []
         // Path clearing indexes
         const path = [
@@ -71,9 +72,49 @@ class map {
         )
         const line = new THREE.Line(pathGeometry, pathMaterial)
         line.computeLineDistances(pathGeometry)
-        // line.scale.set(1,1,1)
+        
+        var curve = new THREE.CatmullRomCurve3( [
+            new THREE.Vector3( -10, 0, 10 ),
+            new THREE.Vector3( -5, 5, 5 ),
+            new THREE.Vector3( 0, 0, 0 ),
+            new THREE.Vector3( 5, -5, 5 ),
+            new THREE.Vector3( 10, 0, 10 )
+        ] );
+        
+        var points = curve.getPoints( 15 );
+        var geometry = new THREE.BoxGeometry(1,1,1).setFromPoints( points );
+        
+        var material = new THREE.MeshBasicMaterial( { color : 0xff0000 } );
+        
+        // Create the final object to add to the scene
+        var curveObject = new THREE.Mesh( geometry, material );
+        curveObject.scale.set(5,5,5)
+
+
+        const arrow = new ARROW.arrow(-4,4,7)
+        // const arrow = new ARROW.arrow(path[0].x,1,path[0].y)
+        // console.log(arrow)
+        // plane.position.set(path[0].x,1,path[0].y)
+        // for(let pos of path){
+        //     const {x,y} = pos
+        //     console.log(x,y)
+        //     new TWEEN.Tween(plane.position)
+        //         .to({x:x,z:y},1000)
+        //         .delay(delay)
+        //         .start()
+        //     delay += 1000
+        // }
+                // const two = new TWEEN.Tween(plane.position)
+                // .to({x:path[4].x,z:path[4].y},500)
+                // const one = new TWEEN.Tween(plane.position)
+                // .to({x:path[2].x,z:path[2].y},1000)
+                // // .delay(500)
+                // // .start()    
+                // .chain(two)
+
+
         const group = new THREE.Group()
-        group.add(...buildings, line)
+        group.add(...buildings,arrow)
         this.group = group
         return this.group
     }

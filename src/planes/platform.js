@@ -111,7 +111,7 @@ renderer.setSize(width, height)
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-// new OrbitControls(camera, canvas)
+new OrbitControls(camera, canvas)
 
 ; (function animate() {
     renderer.render(scene, camera)
