@@ -60,19 +60,6 @@ class map {
         }
 
         // Path object
-        const pathGeometry = new THREE.Geometry()
-        const pathMaterial = new THREE.LineDashedMaterial({
-            color: 0x00ff00, scale: 5,
-            dashSize: 1,
-            gapSize: .5,
-        })
-        pathGeometry.vertices.push(
-            new THREE.Vector3(-5.336, .55, 1.996),
-            new THREE.Vector3(-5.336, .55, 0.664),
-        )
-        const line = new THREE.Line(pathGeometry, pathMaterial)
-        line.computeLineDistances(pathGeometry)
-        
         var curve = new THREE.CatmullRomCurve3( [
             new THREE.Vector3( -10, 0, 10 ),
             new THREE.Vector3( -5, 5, 5 ),
@@ -90,10 +77,8 @@ class map {
         var curveObject = new THREE.Mesh( geometry, material );
         curveObject.scale.set(5,5,5)
 
-
-        const arrow = new ARROW.arrow(-4,4,7)
-        // const arrow = new ARROW.arrow(path[0].x,1,path[0].y)
-        // console.log(arrow)
+        // const arrow = new ARROW.arrow(-4,4,7)
+        const arrow = new ARROW.arrow(path[0].x,.4,path[0].y)
         // plane.position.set(path[0].x,1,path[0].y)
         // for(let pos of path){
         //     const {x,y} = pos
@@ -111,7 +96,6 @@ class map {
                 // // .delay(500)
                 // // .start()    
                 // .chain(two)
-
 
         const group = new THREE.Group()
         group.add(...buildings,arrow)
