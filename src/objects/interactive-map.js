@@ -63,19 +63,80 @@ class map {
             // Start base pulsation
             ARROW.arrow.prototype.pulsateBase(arrow.group).start()
 
-            console.log(arrow.group.children[0])
-
-            const thirdUp = new TWEEN.Tween(arrow.group.position)
+            const finalUp = new TWEEN.Tween(arrow.group.position)
                 .to({ z: -4.05 }, 1000)
+            // Rotate up with position correction
+            const rotUpFinal = new TWEEN.Tween(arrow.group.children[0].rotation)
+                .to({ y: 0 }, 550)
+                .easing(TWEEN.Easing.Cubic.InOut)
+                .delay(600)
+            const posRightFinal = new TWEEN.Tween(arrow.group.children[0].position)
+                .to({
+                    x: arrow.group.children[0].position.x + .01,
+                    z: arrow.group.children[0].position.z + .01
+                }, 550)
+                .easing(TWEEN.Easing.Cubic.InOut)
+                .delay(600)
+
             const right = new TWEEN.Tween(arrow.group.position)
                 .to({ x: 0.68 }, 1000)
-                .chain(thirdUp)
+                .chain(finalUp)
+
+            // Rotate right with position correction
+            const rotRight = new TWEEN.Tween(arrow.group.children[0].rotation)
+                .to({ y: -Math.PI / 2 }, 550)
+                .easing(TWEEN.Easing.Cubic.InOut)
+                .delay(600)
+                .chain(rotUpFinal)
+            const posRight = new TWEEN.Tween(arrow.group.children[0].position)
+                .to({
+                    x: arrow.group.children[0].position.x - .15,
+                    z: arrow.group.children[0].position.z - .15
+                }, 550)
+                .easing(TWEEN.Easing.Cubic.InOut)
+                .delay(600)
+                .chain(posRightFinal)
+
             const secondUp = new TWEEN.Tween(arrow.group.position)
                 .to({ z: -3.38 }, 1000)
                 .chain(right)
+
+            // Rotate up with position correction
+            const rotUp = new TWEEN.Tween(arrow.group.children[0].rotation)
+                .to({ y: 0 }, 550)
+                // .easing(TWEEN.Easing.Cubic.InOut)
+                .delay(600)
+                .chain(rotRight)
+            const posUp = new TWEEN.Tween(arrow.group.children[0].position)
+                .to({
+                    x: arrow.group.children[0].position.x - .01,
+                    z: arrow.group.children[0].position.z + .01
+                }, 550)
+                .easing(TWEEN.Easing.Cubic.InOut)
+                .delay(600)
+                .chain(posRight)
+
             const left = new TWEEN.Tween(arrow.group.position)
                 .to({ x: -path[1].y }, 1000)
-                // .chain(secondUp)
+                .chain(secondUp)
+
+            // Rotate left with position correction
+            new TWEEN.Tween(arrow.group.children[0].rotation)
+                .to({ y: Math.PI / 2 }, 550)
+                .easing(TWEEN.Easing.Cubic.InOut)
+                .delay(600)
+                .start()
+                .chain(rotUp)
+            new TWEEN.Tween(arrow.group.children[0].position)
+                .to({
+                    x: arrow.group.children[0].position.x + .15,
+                    z: arrow.group.children[0].position.z - .15
+                }, 550)
+                .easing(TWEEN.Easing.Cubic.InOut)
+                .delay(600)
+                .start()
+                .chain(posUp)
+
             const firstUp = new TWEEN.Tween(arrow.group.position)
                 .to({ z: -path[1].y }, 1000)
                 .start()
