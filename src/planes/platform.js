@@ -30,20 +30,19 @@ platform.castShadow = false
 scene.add(platform)
 
 // Platform Objects
-import { object } from "../objects/platform-object";
+import { productBase } from "../objects/product-base";
 import { map } from "../objects/interactive-map"
-scene.add(new object(-6, 0, 0).add(new map()))
-scene.add(new object(0, 0, 0))
-scene.add(new object(6, 0, 0))
+
+const productBase1 = new productBase(-6, 0, 0)
+const interactiveMap = new map()
+productBase1.add(interactiveMap.group)
+scene.add(productBase1)
+
+scene.add(new productBase(0, 0, 0))
+scene.add(new productBase(6, 0, 0))
 
 // LIGHTS
-// var ambientLight = new THREE.AmbientLight(0x707070);
-var ambientLight = new THREE.AmbientLight(0x707070);
-let dirLightAbove = new THREE.DirectionalLight(0xffffff, .5)
-dirLightAbove.castShadow = true
-dirLightAbove.position.set(0, 2, 0);
-scene.add(ambientLight)
-
+const ambientLight = new THREE.AmbientLight(0x707070);
 const spotligt = new THREE.SpotLight(0x707070, 1.5)
 spotligt.castShadow = true
 spotligt.position.set(-6, 5, 0)
@@ -51,7 +50,7 @@ spotligt.angle = Math.PI / 1.8
 spotligt.shadow.mapSize.width = 8000;
 spotligt.shadow.mapSize.height = 8000;
 
-scene.add(spotligt)
+scene.add(ambientLight, spotligt)
 
 // CAMERA
 const camera = new THREE.PerspectiveCamera(60, width / height, 1, 500)
@@ -59,6 +58,13 @@ camera.lookAt(0, 0, 0)
 camera.position.set(-6, 6, 10)
 camera.rotation.set(-Math.PI / 8, 0, 0)
 let cameraIndex = -6;
+
+// Begin map animation
+interactiveMap.anim()
+
+camera.rotation.set(-Math.PI/2,0,0)
+camera.position.set(-6,5,0)
+
 // Camera movement on keypress handler
 const moveCamera = direction => {
     let index = cameraIndex
@@ -76,6 +82,7 @@ const moveCamera = direction => {
                 .to({ x: -Math.PI / 2 }, 550)
                 .easing(TWEEN.Easing.Quadratic.Out)
                 .start()
+
             break
         case 'down':
             new TWEEN.Tween(camera.position)
@@ -94,7 +101,6 @@ const moveCamera = direction => {
             .to({ x: index }, 500)
             .easing(TWEEN.Easing.Quadratic.InOut)
             .start()
-        //Tween Spotlight
 
         new TWEEN.Tween(spotligt.position)
             .to({ x: index }, 250)
@@ -103,6 +109,7 @@ const moveCamera = direction => {
         cameraIndex = index
     }
 }
+
 // ACTION
 const canvas = document.querySelector('canvas')
 const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true })
@@ -111,10 +118,10 @@ renderer.setSize(width, height)
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-new OrbitControls(camera, canvas)
+// new OrbitControls(camera, canvas)
 
-; (function animate() {
-    renderer.render(scene, camera)
-    window.requestAnimationFrame(animate)
-    TWEEN.update()
-})()
+    ; (function animate() {
+        renderer.render(scene, camera)
+        window.requestAnimationFrame(animate)
+        TWEEN.update()
+    })()

@@ -1,7 +1,6 @@
 const THREE = require('three')
-const TWEEN = require('@tweenjs/tween.js')
 
-class object {
+class productBase {
     constructor(position) {
         const color = 0xb5b5b5
         const geometry = new THREE.BoxGeometry(5, 5, .1)
@@ -16,19 +15,8 @@ class object {
         this.group = group
         return this.group
     }
-
-    move(obj, to) {
-        const [x, y, z] = [...to]
-        const tween = new TWEEN.Tween(obj.position)
-            .to({ x: x, y: y, z: z }, 3000)
-            .easing(TWEEN.Easing.Quadratic.InOut)
-            .delay(1500)
-            .start();
-        return tween
-    }
-
 }
 
 module.exports = {
-    object: object,
+    productBase: productBase,
 }
