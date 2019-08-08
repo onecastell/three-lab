@@ -10,7 +10,7 @@ class arrow {
         arrowShape.lineTo(0, .4);
 
         const arrowExtrudeSettings = {
-            steps: 1.5,
+            steps: 1,
             depth: .1,
             bevelEnabled: true,
             bevelThickness: .005,
@@ -19,7 +19,7 @@ class arrow {
             bevelSegments: 10
         };
 
-        const arrowGeometry = new THREE.ExtrudeGeometry(arrowShape, arrowExtrudeSettings);
+        const arrowGeometry = new THREE.ExtrudeBufferGeometry(arrowShape, arrowExtrudeSettings);
         arrowGeometry.rotateX(-Math.PI / 2)
         arrowGeometry.rotateZ(Math.PI)
 
@@ -27,8 +27,8 @@ class arrow {
         const arrow = new THREE.Mesh(arrowGeometry, arrowMaterial)
         arrow.position.set(x, y, z)
         //arrow.position.set(x, y, z - .1)
-        
-        const baseGeometry = new THREE.CircleGeometry(.36, 64)
+
+        const baseGeometry = new THREE.CircleBufferGeometry(.36, 64)
         baseGeometry.rotateX(-Math.PI / 2)
         baseGeometry.rotateZ(Math.PI)
         const baseMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, transparent: true })
@@ -38,16 +38,6 @@ class arrow {
 
         this.group = new THREE.Group()
         this.group.add(arrow, base)
-
-        // Rotate left with position correction
-        new TWEEN.Tween(arrow.rotation)
-            .to({ y: Math.PI / 2 }, 550)
-            .easing(TWEEN.Easing.Cubic.InOut)
-        // .start()
-        new TWEEN.Tween(arrow.position)
-            .to({ x: base.position.x + .15, z: base.position.z - .01 }, 550)
-            .easing(TWEEN.Easing.Cubic.InOut)
-        // .start()
     }
 
     pulsateBase(arrow) {

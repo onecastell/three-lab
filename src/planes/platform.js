@@ -21,7 +21,7 @@ document.onkeydown = event => {
 }
 
 // Platform
-const platformGoemetry = new THREE.PlaneGeometry(20, 8)
+const platformGoemetry = new THREE.PlaneBufferGeometry(20, 8)
 const platformMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, side: THREE.DoubleSide })
 const platform = new THREE.Mesh(platformGoemetry, platformMaterial)
 platform.rotation.x = Math.PI / 2
@@ -45,10 +45,12 @@ scene.add(new productBase(6, 0, 0))
 const ambientLight = new THREE.AmbientLight(0x707070);
 const spotligt = new THREE.SpotLight(0x707070, 1.5)
 spotligt.castShadow = true
+// spotligt.shadow.camera.near = 1
+// spotligt.shadow.camera.far = 200
 spotligt.position.set(-6, 5, 0)
 spotligt.angle = Math.PI / 1.8
-spotligt.shadow.mapSize.width = 8000;
-spotligt.shadow.mapSize.height = 8000;
+spotligt.shadow.mapSize.width = 4096;
+spotligt.shadow.mapSize.height = 4096;
 
 scene.add(ambientLight, spotligt)
 
@@ -58,7 +60,7 @@ camera.lookAt(0, 0, 0)
 camera.position.set(-6, 6, 10)
 camera.rotation.set(-Math.PI / 8, 0, 0)
 let cameraIndex = -6;
-
+// let cameraIndex = 0;
 // Begin map animation
 interactiveMap.anim()
 
@@ -117,7 +119,6 @@ renderer.setSize(width, height)
 // Enable Shadows
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
 // new OrbitControls(camera, canvas)
 
     ; (function animate() {

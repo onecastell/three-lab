@@ -3,7 +3,7 @@ const THREE = require('three')
 class productBase {
     constructor(position) {
         const color = 0xb5b5b5
-        const geometry = new THREE.BoxGeometry(5, 5, .1)
+        const geometry = new THREE.BoxBufferGeometry(5, 5, .1)
         const material = new THREE.MeshPhongMaterial({ color: color })
         const base = new THREE.Mesh(geometry, material)
         base.rotation.x = Math.PI / 2
