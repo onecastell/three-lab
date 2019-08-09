@@ -29,17 +29,27 @@ platform.receiveShadow = true
 platform.castShadow = false
 scene.add(platform)
 
-// Platform Objects
+
+// Bases and products
 import { productBase } from "../objects/product-base";
 import { map } from "../objects/interactive-map"
+import { screens } from "../objects/screens"
 
+// First base
 const productBase1 = new productBase(-6, 0, 0)
 const interactiveMap = new map()
-productBase1.add(interactiveMap.group)
-scene.add(productBase1)
+productBase1.group.add(interactiveMap.group)
+scene.add(productBase1.group)
 
-scene.add(new productBase(0, 0, 0))
-scene.add(new productBase(6, 0, 0))
+// Second Base
+const productBase2 = new productBase(0, 0, 0)
+// Disable shadow reception to allow for shadow emulation
+productBase2.base.receiveShadow = false
+const screenCarousel = new screens()
+scene.add(productBase2.group,screenCarousel.group)
+
+// Third Base
+scene.add(new productBase(6, 0, 0).group)
 
 // LIGHTS
 const ambientLight = new THREE.AmbientLight(0x707070);
@@ -47,7 +57,7 @@ const spotligt = new THREE.SpotLight(0x707070, 1.5)
 spotligt.castShadow = true
 // spotligt.shadow.camera.near = 1
 // spotligt.shadow.camera.far = 200
-spotligt.position.set(-6, 5, 0)
+spotligt.position.set(0, 5, 0)
 spotligt.angle = Math.PI / 1.8
 spotligt.shadow.mapSize.width = 4096;
 spotligt.shadow.mapSize.height = 4096;
@@ -59,13 +69,16 @@ const camera = new THREE.PerspectiveCamera(60, width / height, 1, 500)
 camera.lookAt(0, 0, 0)
 camera.position.set(-6, 6, 10)
 camera.rotation.set(-Math.PI / 8, 0, 0)
-let cameraIndex = -6;
-// let cameraIndex = 0;
+// let cameraIndex = -6;
+let cameraIndex = 0;
 // Begin map animation
-interactiveMap.anim()
+// interactiveMap.anim()
+// Begin screen carousel animation
+screenCarousel.anim()
 
-camera.rotation.set(-Math.PI/2,0,0)
-camera.position.set(-6,5,0)
+// camera.rotation.set(-Math.PI/2,0,0)
+// camera.position.set(-1.5,2,3)
+camera.position.set(0, 6, 10)
 
 // Camera movement on keypress handler
 const moveCamera = direction => {

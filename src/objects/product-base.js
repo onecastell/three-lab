@@ -5,15 +5,14 @@ class productBase {
         const color = 0xb5b5b5
         const geometry = new THREE.BoxBufferGeometry(5, 5, .1)
         const material = new THREE.MeshPhongMaterial({ color: color })
-        const base = new THREE.Mesh(geometry, material)
-        base.rotation.x = Math.PI / 2
-        base.position.set(position, .2, 0)
-        base.castShadow = true
-        base.receiveShadow = true
+        this.base = new THREE.Mesh(geometry, material)
+        this.base.rotation.x = Math.PI / 2
+        this.base.position.set(position, .2, 0)
+        this.base.castShadow = true
+        this.base.receiveShadow = true
         const group = new THREE.Group()
-        group.add(base)
+        group.add(this.base)
         this.group = group
-        return this.group
     }
 }
 
