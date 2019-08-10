@@ -39,6 +39,29 @@ class screens {
         //     .repeatDelay(1000)
         // // .start()
 
+        // Video Overlay
+        const vidElement = document.createElement('video')
+        vidElement.src = '../assets/videos/holo.mp4#t=7'
+        vidElement.autoplay = false
+        vidElement.loop = true
+        
+        const videoGeometry = new THREE.PlaneBufferGeometry(width, height)
+        const videoTexture = new THREE.VideoTexture(vidElement);
+        videoTexture.minFilter = THREE.LinearFilter;
+        videoTexture.magFilter = THREE.LinearFilter;
+        videoTexture.format = THREE.RGBFormat;
+        const videoMaterial = new THREE.MeshPhongMaterial({map:videoTexture})
+        const videoOverlay = new THREE.Mesh(videoGeometry,videoMaterial)
+        videoOverlay.position.set(0, .66, -.5)
+        videoOverlay.rotation.x = -Math.PI/2
+
+        // Video focus animation 
+        new TWEEN.Tween(videoOverlay.scale)
+            .to({y:.85},2000)
+            .delay(duration)
+            .easing(TWEEN.Easing.Back.Out)
+            .start()
+
         // Start Screen Carousel Animation
         this.anim = () => {
             // Top Screen Animation
@@ -79,7 +102,7 @@ class screens {
         }
 
         this.group = new THREE.Group()
-        this.group.add(screen, bottomScreen)
+        this.group.add(screen, bottomScreen,videoOverlay)
     }
 }
 
