@@ -8,7 +8,7 @@ class screens {
         const height = 3
         const duration = 1000
 
-        const screenGeometry = new THREE.BoxBufferGeometry(width, height, .1)
+        const screenGeometry = new THREE.BoxBufferGeometry(width, .1, height)
         const screenMaterial = new THREE.MeshLambertMaterial({ color: 0x353535, transparent: true })
         screenMaterial.opacity = 0
 
@@ -16,14 +16,10 @@ class screens {
         const screen = new THREE.Mesh(screenGeometry, screenMaterial)
         screen.castShadow = true
         screen.position.set(0, .6, -.5)
-        screen.rotation.set(Math.PI / 2, 0, 0)
-
 
         // Bottom Screen
         const bottomScreenMaterial = new THREE.MeshLambertMaterial({ color: 0x353535, transparent: true })
         const bottomScreen = new THREE.Mesh(screenGeometry, bottomScreenMaterial)
-
-        bottomScreen.rotation.set(Math.PI / 2, 0, 0)
         bottomScreen.material.opacity = 0
         bottomScreen.position.set(0, .1, -.5)
 
