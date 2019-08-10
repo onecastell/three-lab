@@ -34,6 +34,7 @@ scene.add(platform)
 import { productBase } from "../objects/product-base";
 import { map } from "../objects/interactive-map"
 import { screens } from "../objects/screens"
+import { button } from "../objects/play-pause-button"
 
 // First base
 const productBase1 = new productBase(-6, 0, 0)
@@ -45,6 +46,10 @@ scene.add(productBase1.group)
 const productBase2 = new productBase(0, 0, 0)
 // Disable shadow reception to allow for shadow emulation
 productBase2.base.receiveShadow = false
+// Play-pause button
+const playPause = new button()
+productBase2.group.add(playPause.group)
+
 const screenCarousel = new screens()
 scene.add(productBase2.group,screenCarousel.group)
 
@@ -76,9 +81,9 @@ let cameraIndex = 0;
 // Begin screen carousel animation
 screenCarousel.anim()
 
-// camera.rotation.set(-Math.PI/2,0,0)
+camera.rotation.set(-Math.PI/2,0,0)
 // camera.position.set(-1.5,2,3)
-camera.position.set(0, 6, 10)
+camera.position.set(0, 5, 0)
 
 // Camera movement on keypress handler
 const moveCamera = direction => {
