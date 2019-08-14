@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import OrbitControls from 'three-orbitcontrols'
 import TWEEN from '@tweenjs/tween.js'
+import { Interaction } from 'three.interaction'
+
 const scene = new THREE.Scene()
 scene.background = new THREE.Color(0x8DE969)
 const [width, height] = [window.innerWidth, window.innerHeight]
@@ -51,7 +53,7 @@ const playPause = new button()
 productBase2.group.add(playPause.group)
 
 const screenCarousel = new screens()
-scene.add(productBase2.group,screenCarousel.group)
+scene.add(productBase2.group, screenCarousel.group)
 
 // Third Base
 scene.add(new productBase(6, 0, 0).group)
@@ -81,7 +83,7 @@ let cameraIndex = 0;
 // Begin screen carousel animation
 screenCarousel.anim()
 
-camera.rotation.set(-Math.PI/2,0,0)
+camera.rotation.set(-Math.PI / 2, 0, 0)
 // camera.position.set(-1.5,2,3)
 camera.position.set(0, 5, 0)
 
@@ -134,13 +136,23 @@ const moveCamera = direction => {
 const canvas = document.querySelector('canvas')
 const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true })
 renderer.setSize(width, height)
+
+// Object Listeners
+const interaction = new Interaction(renderer, scene, camera)
+// Play-pause button click listener
+playPause.group.cursor = 'pointer'
+playPause.group.on('click', event => {
+    playPause.state === 'play'
+        ? playPause.toPauseButton()
+        : playPause.toPlayButton()
+})
 // Enable Shadows
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 // new OrbitControls(camera, canvas)
 
-    ; (function animate() {
-        renderer.render(scene, camera)
-        window.requestAnimationFrame(animate)
-        TWEEN.update()
-    })()
+; (function animate() {
+    renderer.render(scene, camera)
+    window.requestAnimationFrame(animate)
+    TWEEN.update()
+})()

@@ -41,7 +41,7 @@ class screens {
 
         // Video Overlay
         const vidElement = document.createElement('video')
-        vidElement.src = '../assets/videos/holo.mp4#t=7'
+        // vidElement.src = '../assets/videos/holo.mp4#t=7'
         vidElement.autoplay = false
         vidElement.loop = true
         
