@@ -3,18 +3,23 @@ const TWEEN = require('@tweenjs/tween.js')
 
 class button {
     constructor() {
-        // const buttonGeometry = new THREE.BoxGeometry(.6, .1, .6)
         const buttonGeometry = new THREE.BoxGeometry(.2, .1, .6)
         const buttonMaterial = new THREE.MeshLambertMaterial({ color: 0xeaeaea, transparent: true })
 
         const button = new THREE.Mesh(buttonGeometry, buttonMaterial)
-        // button.position.set(0, .6, 1.6)
         button.position.set(-.175, .6, 1.6)
 
         const pauseButtonGeometry = new THREE.BoxGeometry(.2, .1, .6)
         const pauseButtonMaterial = new THREE.MeshLambertMaterial({ color: 0xeaeaea, transparent: true })
         const pauseButton = new THREE.Mesh(pauseButtonGeometry, pauseButtonMaterial)
         pauseButton.position.set(.175, .6, 1.6)
+
+        // Bounding box for click listener capture
+        const boundingBox = new THREE.Mesh(
+            new THREE.BoxGeometry(.6, .1, .6),
+            new THREE.MeshBasicMaterial({ transparent: true, opacity: 0 })
+        )
+        boundingBox.position.set(0, .6, 1.6)
 
         const duration = 500
         const delay = 500
@@ -24,6 +29,7 @@ class button {
         const right = button.geometry.vertices[0].z
 
         this.toPlayButton = () => {
+            this.state = 'play'
             // Morph from pause button to play button
             const expandPlayButton = new TWEEN.Tween(button.scale)
                 .to({ x: 3 }, duration / 2)
@@ -52,7 +58,7 @@ class button {
         }
 
         this.toPauseButton = () => {
-
+            this.state = 'pause'
             for (let v = 0, length = 3; v <= length; v++) {
                 new TWEEN.Tween(button.geometry.vertices[v])
                     .to({ z: v % 2 === 0 ? right : -right }, duration)
@@ -87,16 +93,16 @@ class button {
 
         this.toPlayButton()
 
-        setTimeout(() => {
-            this.toPauseButton()
-        }, duration * 2);
+        // setTimeout(() => {
+        //     this.toPauseButton()
+        // }, duration * 2);
 
-        setTimeout(() => {
-            this.toPlayButton()
-        }, duration * 6);
+        // setTimeout(() => {
+        //     this.toPlayButton()
+        // }, duration * 6);
 
         this.group = new THREE.Group()
-        this.group.add(button, pauseButton)
+        this.group.add(button, pauseButton, boundingBox)
     }
 }
 
