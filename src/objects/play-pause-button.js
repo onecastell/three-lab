@@ -50,7 +50,7 @@ class playPauseButton {
                     .onUpdate(updateVertices)
                     .start()
                 new TWEEN.Tween(button.position)
-                    .to({ x: 0 }, duration)
+                    .to({ x: .05 }, duration)
                     .delay(delay)
                     .easing(TWEEN.Easing.Back.InOut)
                     .start()
