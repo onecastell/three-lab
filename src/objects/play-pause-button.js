@@ -1,7 +1,7 @@
 const THREE = require('three')
 const TWEEN = require('@tweenjs/tween.js')
 
-class button {
+class playPauseButton {
     constructor() {
         const buttonGeometry = new THREE.BoxGeometry(.2, .1, .6)
         const buttonMaterial = new THREE.MeshLambertMaterial({ color: 0xeaeaea, transparent: true })
@@ -62,44 +62,31 @@ class button {
             for (let v = 0, length = 3; v <= length; v++) {
                 new TWEEN.Tween(button.geometry.vertices[v])
                     .to({ z: v % 2 === 0 ? right : -right }, duration)
-                    .delay(delay)
                     .easing(TWEEN.Easing.Back.InOut)
                     .onUpdate(updateVertices)
                     .start()
             }
             new TWEEN.Tween(button.scale)
                 .to({ x: 1 }, duration)
-                .delay(delay)
                 .easing(TWEEN.Easing.Back.InOut)
                 .start()
             new TWEEN.Tween(button.position)
                 .to({ x: -.175 }, duration)
-                .delay(delay)
                 .easing(TWEEN.Easing.Back.InOut)
                 .start()
 
             // Second bar reveal
             const revealSecondBar = new TWEEN.Tween(pauseButton.material)
                 .to({ opacity: 1 }, duration / 2)
-                .delay(delay * 2)
+                .delay(delay)
                 .easing(TWEEN.Easing.Back.InOut)
                 .start()
             new TWEEN.Tween(pauseButton.position)
                 .to({ x: .175 }, duration / 2)
-                .delay(delay * 2)
+                .delay(delay)
                 .easing(TWEEN.Easing.Back.InOut)
                 .start()
         }
-
-        this.toPlayButton()
-
-        // setTimeout(() => {
-        //     this.toPauseButton()
-        // }, duration * 2);
-
-        // setTimeout(() => {
-        //     this.toPlayButton()
-        // }, duration * 6);
 
         this.group = new THREE.Group()
         this.group.add(button, pauseButton, boundingBox)
@@ -107,5 +94,5 @@ class button {
 }
 
 module.exports = {
-    button: button
+    playPauseButton: playPauseButton
 }
