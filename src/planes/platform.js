@@ -7,57 +7,6 @@ const scene = new THREE.Scene()
 scene.background = new THREE.Color(0x8DE969)
 const [width, height] = [window.innerWidth, window.innerHeight]
 
-// Keyboard keypress handler
-document.onkeydown = event => {
-    // Move camera to direction of arrow key
-    switch (event.key) {
-        case 'ArrowLeft': moveCamera('left')
-            break
-        case 'ArrowRight': moveCamera('right')
-            break
-        case 'ArrowUp': moveCamera('up')
-            break
-        case 'ArrowDown': moveCamera('down')
-            break
-    }
-}
-
-// Platform
-const platformGoemetry = new THREE.PlaneBufferGeometry(20, 8)
-const platformMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, side: THREE.DoubleSide })
-const platform = new THREE.Mesh(platformGoemetry, platformMaterial)
-platform.rotation.x = Math.PI / 2
-platform.receiveShadow = true
-platform.castShadow = false
-scene.add(platform)
-
-
-// Bases and products
-import { productBase } from "../objects/product-base";
-import { map } from "../objects/interactive-map"
-import { screens } from "../objects/screens"
-import { button } from "../objects/play-pause-button"
-
-// First base
-const productBase1 = new productBase(-6, 0, 0)
-const interactiveMap = new map()
-productBase1.group.add(interactiveMap.group)
-scene.add(productBase1.group)
-
-// Second Base
-const productBase2 = new productBase(0, 0, 0)
-// Disable shadow reception to allow for shadow emulation
-productBase2.base.receiveShadow = false
-// Play-pause button
-const playPause = new button()
-productBase2.group.add(playPause.group)
-
-const screenCarousel = new screens()
-scene.add(productBase2.group, screenCarousel.group)
-
-// Third Base
-scene.add(new productBase(6, 0, 0).group)
-
 // LIGHTS
 const ambientLight = new THREE.AmbientLight(0x707070);
 const spotligt = new THREE.SpotLight(0x707070, 1.5)
@@ -78,11 +27,6 @@ camera.position.set(-6, 6, 10)
 camera.rotation.set(-Math.PI / 8, 0, 0)
 // let cameraIndex = -6;
 let cameraIndex = 0;
-// Begin map animation
-// interactiveMap.anim()
-// Begin screen carousel animation
-screenCarousel.anim()
-
 camera.rotation.set(-Math.PI / 2, 0, 0)
 // camera.position.set(-1.5,2,3)
 camera.position.set(0, 5, 0)
@@ -132,11 +76,74 @@ const moveCamera = direction => {
     }
 }
 
+
 // ACTION
 const canvas = document.querySelector('canvas')
 const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true })
 renderer.setSize(width, height)
+// Enable Shadows
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+// new OrbitControls(camera, canvas)
 
+// Platform
+const platformGoemetry = new THREE.PlaneBufferGeometry(20, 8)
+const platformMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, side: THREE.DoubleSide })
+const platform = new THREE.Mesh(platformGoemetry, platformMaterial)
+platform.rotation.x = Math.PI / 2
+platform.receiveShadow = true
+platform.castShadow = false
+scene.add(platform)
+
+// Bases and products
+import { productBase } from "../objects/product-base";
+import { map } from "../objects/interactive-map"
+import { screens } from "../objects/screens"
+import { playPauseButton } from "../objects/play-pause-button"
+import { prevNextButton } from "../objects/prev-next-button"
+
+// First base
+const productBase1 = new productBase(-6, 0, 0)
+const interactiveMap = new map()
+productBase1.group.add(interactiveMap.group)
+scene.add(productBase1.group)
+
+// Second Base
+const productBase2 = new productBase(0, 0, 0)
+// Disable shadow reception to allow for shadow emulation
+productBase2.base.receiveShadow = false
+// Prev button
+const prevButton = new prevNextButton('prev')
+// Next buttton
+const nextButton = new prevNextButton('next')
+
+productBase2.group.add(prevButton.group, nextButton.group)
+
+// Play-pause button
+const playPause = new playPauseButton()
+productBase2.group.add(playPause.group)
+
+const screenCarousel = new screens()
+scene.add(productBase2.group, screenCarousel.group)
+
+// Third Base
+scene.add(new productBase(6, 0, 0).group)
+
+
+// Keypress listener
+document.onkeydown = event => {
+    // Move camera to direction of arrow key
+    switch (event.key) {
+        case 'ArrowLeft': moveCamera('left')
+            break
+        case 'ArrowRight': moveCamera('right')
+            break
+        case 'ArrowUp': moveCamera('up')
+            break
+        case 'ArrowDown': moveCamera('down')
+            break
+    }
+}
 // Object Listeners
 const interaction = new Interaction(renderer, scene, camera)
 // Play-pause button click listener
@@ -146,13 +153,32 @@ playPause.group.on('click', event => {
         ? playPause.toPauseButton()
         : playPause.toPlayButton()
 })
-// Enable Shadows
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-// new OrbitControls(camera, canvas)
+// Prev-next button click listener
+prevButton.group.cursor = 'pointer'
+nextButton.group.cursor = 'pointer'
+prevButton.group.on('click', event => {
+    prevButton.anim()
+})
+nextButton.group.on('click', event => {
+    nextButton.anim()
+})
 
-; (function animate() {
-    renderer.render(scene, camera)
-    window.requestAnimationFrame(animate)
-    TWEEN.update()
-})()
+
+// Trigger animations
+// interactiveMap.anim()
+screenCarousel.anim()
+playPause.toPlayButton()
+
+setTimeout(() => {
+    prevButton.anim()
+}, 500);
+setTimeout(() => {
+    nextButton.anim()
+}, 800)
+
+
+    ; (function animate() {
+        renderer.render(scene, camera)
+        window.requestAnimationFrame(animate)
+        TWEEN.update()
+    })()
