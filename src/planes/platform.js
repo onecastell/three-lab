@@ -4,7 +4,7 @@ import TWEEN from '@tweenjs/tween.js'
 import { Interaction } from 'three.interaction'
 
 const scene = new THREE.Scene()
-scene.background = new THREE.Color(0x8DE969)
+// scene.background = new THREE.Color(0x8DE969)
 const [width, height] = [window.innerWidth, window.innerHeight]
 
 // LIGHTS
@@ -79,8 +79,10 @@ const moveCamera = direction => {
 
 // ACTION
 const canvas = document.querySelector('canvas')
-const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true })
+const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true })
+renderer.setClearColor(0x000000, 0)
 renderer.setSize(width, height)
+
 // Enable Shadows
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -148,10 +150,11 @@ document.onkeydown = event => {
 const interaction = new Interaction(renderer, scene, camera)
 // Play-pause button click listener
 playPause.group.cursor = 'pointer'
+const video = screenCarousel.video
 playPause.group.on('click', event => {
     playPause.state === 'play'
-        ? playPause.toPauseButton()
-        : playPause.toPlayButton()
+        ? (playPause.toPauseButton(), video.play())
+        : (playPause.toPlayButton(), video.pause())
 })
 // Prev-next button click listener
 prevButton.group.cursor = 'pointer'

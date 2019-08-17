@@ -40,13 +40,14 @@ class screens {
         // // .start()
 
         // Video Overlay
-        const vidElement = document.createElement('video')
-        // vidElement.src = '../assets/videos/holo.mp4#t=7'
-        vidElement.autoplay = false
-        vidElement.loop = true
+        this.video = document.createElement('video')
+        this.video.src = '../assets/videos/seoul.mp4#t=0'
+        this.video.autoplay = false
+        this.video.loop = true
+
         
-        const videoGeometry = new THREE.PlaneBufferGeometry(width, height)
-        const videoTexture = new THREE.VideoTexture(vidElement);
+        const videoGeometry = new THREE.PlaneBufferGeometry(width-.05, height-1)
+        const videoTexture = new THREE.VideoTexture(this.video);
         videoTexture.minFilter = THREE.LinearFilter;
         videoTexture.magFilter = THREE.LinearFilter;
         videoTexture.format = THREE.RGBFormat;
@@ -54,13 +55,13 @@ class screens {
         const videoOverlay = new THREE.Mesh(videoGeometry,videoMaterial)
         videoOverlay.position.set(0, .66, -.5)
         videoOverlay.rotation.x = -Math.PI/2
-
+        
         // Video focus animation 
         new TWEEN.Tween(videoOverlay.scale)
             .to({y:.85},2000)
             .delay(duration)
             .easing(TWEEN.Easing.Back.Out)
-            .start()
+            // .start()
 
         // Start Screen Carousel Animation
         this.anim = () => {
