@@ -146,6 +146,46 @@ document.onkeydown = event => {
             break
     }
 }
+// Mouse scroll listener
+window.addEventListener('wheel', event => {
+    event.wheelDeltaX < 0 || event.wheelDeltaY < 0
+        ? moveCamera('right')   //  Move Right
+        : moveCamera('left')    // Move Left
+})
+
+let touchX = 0
+let touchY = 0
+
+let xDelta = 0
+let yDelta = 0
+
+// Touch event listeners
+window.addEventListener('touchstart', event => {
+    touchX = event.touches[0].clientX
+    touchY = event.touches[0].clientY
+    window.addEventListener('touchmove', event => {
+        xDelta = event.changedTouches[0].clientX
+        yDelta = event.changedTouches[0].clientY
+    })
+})
+
+window.addEventListener('touchend', event => {
+    // Perform action on greatest delta
+    if (touchY - yDelta > touchX - xDelta) {
+        if (touchY - yDelta < 0)
+            moveCamera('up')
+        else if (touchY - yDelta > 0)
+            moveCamera('down')
+    }
+    else {
+        if (touchX - xDelta < 0)
+            moveCamera('left')
+        else if (touchX - xDelta > 0)
+            moveCamera('right')
+    }
+
+})
+
 // Object Listeners
 const interaction = new Interaction(renderer, scene, camera)
 // Play-pause button click listener
@@ -165,7 +205,6 @@ prevButton.group.on('click', event => {
 nextButton.group.on('click', event => {
     nextButton.anim()
 })
-
 
 // Trigger animations
 // interactiveMap.anim()
