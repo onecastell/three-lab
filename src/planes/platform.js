@@ -27,9 +27,9 @@ camera.position.set(-6, 6, 10)
 camera.rotation.set(-Math.PI / 8, 0, 0)
 // let cameraIndex = -6;
 let cameraIndex = 0;
-camera.rotation.set(-Math.PI / 2, 0, 0)
+// camera.rotation.set(-Math.PI / 2, 0, 0)
 // camera.position.set(-1.5,2,3)
-camera.position.set(0, 5, 0)
+// camera.position.set(0, 5, 0)
 
 // Camera movement on keypress handler
 const moveCamera = direction => {
@@ -201,9 +201,11 @@ prevButton.group.cursor = 'pointer'
 nextButton.group.cursor = 'pointer'
 prevButton.group.on('click', event => {
     prevButton.anim()
+    screenCarousel.prev()
 })
 nextButton.group.on('click', event => {
     nextButton.anim()
+    screenCarousel.next()
 })
 
 // Trigger animations
