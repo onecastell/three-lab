@@ -22,7 +22,6 @@ class screens {
             screenMaterial.opacity = 1
             const screen = new THREE.Mesh(screenGeometry, screenMaterial)
             screen.castShadow = false
-            // screen.position.set(0, .6, -.5)
             screen.position.set(0, screenYpos -= .4, -.5)
             this.screens.add(screen)
         }
@@ -43,7 +42,6 @@ class screens {
                     .start()
                 new TWEEN.Tween(this.screens.children[screenIndex - 1].material)
                     .to({ opacity: 0 }, 700)
-
                     .delay(500)
                     .start()
                 screenIndex += 1
@@ -84,13 +82,6 @@ class screens {
         shadowMaterial.opacity = 0
         shadowPlane.position.set(0, .26, -.5)
         shadowPlane.rotation.set(-Math.PI / 2, 0, 0)
-
-        //     new TWEEN.Tween(shadowPlane.material)
-        //     .to({ opacity: .5 }, duration)
-        //     // .yoyo(true)
-        //     .repeat(Infinity)
-        //     .repeatDelay(1000)
-        // // .start()
 
         // Video Overlay
         this.video = document.createElement('video')

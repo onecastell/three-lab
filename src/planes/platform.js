@@ -23,12 +23,12 @@ scene.add(ambientLight, spotligt)
 // CAMERA
 const camera = new THREE.PerspectiveCamera(60, width / height, 1, 500)
 camera.lookAt(0, 0, 0)
-camera.position.set(-6, 6, 10)
-camera.rotation.set(-Math.PI / 8, 0, 0)
+// camera.position.set(-6, 6, 10)
+// camera.rotation.set(-Math.PI / 8, 0, 0)
 // let cameraIndex = -6;
 let cameraIndex = 0;
-// camera.rotation.set(-Math.PI / 2, 0, 0)
-camera.position.set(6,6,10)
+camera.rotation.set(-Math.PI / 2, 0, 0)
+camera.position.set(6, 5, 0)
 // camera.position.set(0, 5, 0)
 
 // Camera movement on keypress handler
