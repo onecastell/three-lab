@@ -28,7 +28,7 @@ camera.rotation.set(-Math.PI / 8, 0, 0)
 // let cameraIndex = -6;
 let cameraIndex = 0;
 // camera.rotation.set(-Math.PI / 2, 0, 0)
-// camera.position.set(-1.5,2,3)
+camera.position.set(6,6,10)
 // camera.position.set(0, 5, 0)
 
 // Camera movement on keypress handler
@@ -103,7 +103,7 @@ import { map } from "../objects/interactive-map"
 import { screens } from "../objects/screens"
 import { playPauseButton } from "../objects/play-pause-button"
 import { prevNextButton } from "../objects/prev-next-button"
-
+import { graph } from "../objects/graph"
 // First base
 const productBase1 = new productBase(-6, 0, 0)
 const interactiveMap = new map()
@@ -129,7 +129,10 @@ const screenCarousel = new screens()
 scene.add(productBase2.group, screenCarousel.group)
 
 // Third Base
-scene.add(new productBase(6, 0, 0).group)
+const productBase3 = new productBase(6, 0, 0);
+const interactiveGraph = new graph()
+productBase3.group.add(interactiveGraph.group)
+scene.add(productBase3.group)
 
 
 // Keypress listener
