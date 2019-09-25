@@ -156,38 +156,42 @@ window.addEventListener('wheel', event => {
         : moveCamera('left')    // Move Left
 })
 
-let touchX = 0
-let touchY = 0
-
-let xDelta = 0
-let yDelta = 0
-
 // Touch event listeners
-window.addEventListener('touchstart', event => {
-    touchX = event.touches[0].clientX
-    touchY = event.touches[0].clientY
-    window.addEventListener('touchmove', event => {
-        xDelta = event.changedTouches[0].clientX
-        yDelta = event.changedTouches[0].clientY
-    })
-})
+var initialX = null;
+var initialY = null;
+ 
+function startTouch(event) {
+  initialX = event.touches[0].clientX;
+  initialY = event.touches[0].clientY;
+};
+ 
+function moveTouch(event) {
+  if (initialX === null || initialY === null) {
+    return;
+  }
+ 
+  var currentX = event.touches[0].clientX;
+  var currentY = event.touches[0].clientY;
+ 
+  var diffX = initialX - currentX;
+  var diffY = initialY - currentY;
+ 
+  if (Math.abs(diffX) > Math.abs(diffY)) {
+    // sliding horizontally inverted
+    diffX > 0 ? moveCamera('right'):moveCamera('left')
+  } else {
+    // sliding vertically inverted
+    diffY > 0 ? moveCamera('down') : moveCamera('up')
+  }
 
-window.addEventListener('touchend', event => {
-    // Perform action on greatest delta
-    if (touchY - yDelta > touchX - xDelta) {
-        if (touchY - yDelta < 0)
-            moveCamera('up')
-        else if (touchY - yDelta > 0)
-            moveCamera('down')
-    }
-    else {
-        if (touchX - xDelta < 0)
-            moveCamera('left')
-        else if (touchX - xDelta > 0)
-            moveCamera('right')
-    }
+  initialX = null;
+  initialY = null;
 
-})
+  event.preventDefault();
+};
+
+window.addEventListener('touchstart',startTouch )
+window.addEventListener('touchmove', moveTouch)
 
 // Object Listeners
 const interaction = new Interaction(renderer, scene, camera)
