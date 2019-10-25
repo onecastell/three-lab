@@ -1,5 +1,6 @@
 const THREE = require('three')
 const TWEEN = require('@tweenjs/tween.js')
+const FORCEGRAPH = require('./force-graph')
 
 class graph {
     constructor() {
@@ -16,7 +17,7 @@ class graph {
         // Y axis
         const yGeometry = new THREE.BoxBufferGeometry(.1, .1, 4)
         const yAxis = new THREE.Mesh(yGeometry, material)
-        yAxis.position.set(4, .4, 0 + .05)
+        yAxis.position.set(4, .4, .05)
         let yUnits = []
 
         this.animAxis = repeat => {
@@ -73,8 +74,12 @@ class graph {
         }
         this.animAxis(3);
 
+        // Force Graph 
+        const forceGraph  = new FORCEGRAPH.graph(6, 1, 0)
+
+
         this.group = new THREE.Group()
-        this.group.add(xAxis, yAxis, ...xUnits, ...yUnits)
+        this.group.add(xAxis, yAxis, ...xUnits, ...yUnits,forceGraph.group)
     }
 }
 module.exports = {
