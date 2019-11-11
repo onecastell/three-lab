@@ -1,15 +1,74 @@
 const THREE = require('three')
 const TWEEN = require('@tweenjs/tween.js')
-
+//TODO: Add bloom pass
 class forceGraph {
     constructor(x, y, z) {
-        const points = [
-            x, y, z,
-            x + -0.3, y + 0.6, z + 0.3,
-            x + 0.15, y + 0.3, z + 0.6,
-            x + -0.75, y + 0, z + 0.9,
-            x + 0.3, y + 0, z + 1.5,
-            x + 1, y + 0.5, z + 0.5,
+        const points1 = [
+            -0.3, -0.6, -0.6,
+
+            0, 0.6, 0,
+            0.3, 0.3, 0.6,
+            -0.75, 0, 0.9,
+
+            0.3, 0, -1,
+            1, 0.5, 0.5,
+            0, 0.9, 1,
+
+            -0.75, 0.4, 0,
+            0.65, 0.25, -0.25,
+            0.65, -0.1, 1.25,
+
+            1, 0.75, -0.5,
+            -0.5, 1, -0.75,
+            -0.25, 0.1, 0.5,
+
+            -0.3, -0.6, -0.6,
+
+        ]
+
+        const points2 = [
+            -0.75, -0.5, -0.5,
+
+            1, 0, 0,
+            -0.5, 0.3, 0,
+            0.75, 0, 0.5,
+
+            0, 0, 0.75,
+            -0.15, 0.5, -0.55,
+            0.5, -0.25, -1,
+
+            1, -0.25, -0.5,
+            -0.5, -0.25, 0.5,
+            0.5, 0.25, -0.5,
+
+            0.5, -0.25, 1,
+            -0.35, 0, -1,
+            1, -0.25, 0.65,
+
+            1, 0.35, -0.8,
+
+        ]
+
+        const points3 = [
+            0, 0, 0,
+
+            0, 0, 0.5,
+            0.5, 0, 0,
+            0, 0, -0.5,
+
+            -0.5, 0, 0,
+            0, 0, 0,
+            -0.5, 0, 0.5,
+
+            0, 0.5, 0,
+            0.5, 0, -0.5,
+            0, -0.5, 0,
+
+            0.5, 0, 0.5,
+            -0.5, 0, -0.5,
+            0, -0.5, 0,
+
+            -0.5, 0, 0.5
         ]
 
         // Lines
@@ -17,7 +76,7 @@ class forceGraph {
         lineGeometry.addAttribute(
             'position',
             new THREE.BufferAttribute(
-                new Float32Array([...points]), 3
+                new Float32Array([...points3]), 3
             )
         )
         const lineMaterial = new THREE.LineBasicMaterial({ color: 0xff0000, linewidth: 2 })
@@ -26,16 +85,67 @@ class forceGraph {
         // Shperes
         const sphereGeometry = new THREE.SphereBufferGeometry(0.15, 32, 32)
         const sphereMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff })
-        const spheres = []
-        while (points.length > 0) {
-            const [x, y, z] = points.splice(0, 3)
+
+        // Chunk function
+        const chunk = (array, chunkSize) => {
+            const result = []
+            for (let i = 0, length = array.length; i < length; i += chunkSize) {
+                result.push(
+                    [array[i],
+                    array[i + 1],
+                    array[i + 2]])
+            }
+            return result
+        }
+
+        // Initial
+        const spheres = chunk(points1, 3).map(([x, y, z]) => {
             const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
             sphere.position.set(x, y, z)
-            spheres.push(sphere)
+            return sphere
+        })
+
+        // Morphs
+
+        const next = chunk(points3, 3)
+
+        const init = chunk(points1, 3)
+        
+
+        for (let [index, point] of Object.entries(chunk(points2, 3))) {
+
+            const third = new TWEEN.Tween(spheres[index].position)
+                .to({ x: init[index][0], y: init[index][1], z: init[index][2] }, 1500)
+                .easing(TWEEN.Easing.Exponential.InOut)
+                // .yoyo(true)
+                .repeat(Infinity)
+                
+
+            const second = new TWEEN.Tween(spheres[index].position)
+                .to({ x: next[index][0], y: next[index][1], z: next[index][2] }, 1500)
+                .easing(TWEEN.Easing.Exponential.InOut)
+                .yoyo(true)
+                .delay(3000)
+                .repeat(Infinity)
+                .chain(third)
+
+            new TWEEN.Tween(spheres[index].position)
+                .to({ x: point[0], y: point[1], z: point[2] }, 1500)
+                .easing(TWEEN.Easing.Exponential.InOut)
+                .yoyo(true)
+                .repeat(Infinity)
+                .start()
+                .chain(second)
         }
 
         this.group = new THREE.Group()
         this.group.add(lines, ...spheres)
+        this.group.position.set(x, y, z)
+        // Rotate Group 
+        new TWEEN.Tween(this.group.rotation)
+            .to({ y: 2 * Math.PI }, 5000)
+            .repeat(Infinity)
+        // .start()
     }
 }
 
