@@ -87,7 +87,7 @@ class forceGraph {
         const sphereMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff })
 
         // Chunk function
-        const chunk = (array, chunkSize) => {
+        var chunk = (array, chunkSize) => {
             const result = []
             for (let i = 0, length = array.length; i < length; i += chunkSize) {
                 result.push(
@@ -108,44 +108,41 @@ class forceGraph {
         // Morphs
 
         const next = chunk(points3, 3)
-
         const init = chunk(points1, 3)
         
+            ; (function timeline() {
+                for (let [index, point] of Object.entries(chunk(points2, 3))) {
 
-        for (let [index, point] of Object.entries(chunk(points2, 3))) {
+                    const third = new TWEEN.Tween(spheres[index].position)
+                        .to({ x: init[index][0], y: init[index][1], z: init[index][2] }, 1500)
+                        .easing(TWEEN.Easing.Exponential.InOut)
+                        .onComplete(e => {
+                            first.start()
+                            console.log(e)
+                        })
 
-            const third = new TWEEN.Tween(spheres[index].position)
-                .to({ x: init[index][0], y: init[index][1], z: init[index][2] }, 1500)
-                .easing(TWEEN.Easing.Exponential.InOut)
-                // .yoyo(true)
-                .repeat(Infinity)
-                
+                    const second = new TWEEN.Tween(spheres[index].position)
+                        .to({ x: next[index][0], y: next[index][1], z: next[index][2] }, 1500)
+                        .easing(TWEEN.Easing.Exponential.InOut)
+                        .chain(third)
 
-            const second = new TWEEN.Tween(spheres[index].position)
-                .to({ x: next[index][0], y: next[index][1], z: next[index][2] }, 1500)
-                .easing(TWEEN.Easing.Exponential.InOut)
-                .yoyo(true)
-                .delay(3000)
-                .repeat(Infinity)
-                .chain(third)
+                    const first = new TWEEN.Tween(spheres[index].position)
+                        .to({ x: point[0], y: point[1], z: point[2] }, 1500)
+                        .easing(TWEEN.Easing.Exponential.InOut)
+                        .start()
+                        .chain(second)
+                }
+            })()
 
-            new TWEEN.Tween(spheres[index].position)
-                .to({ x: point[0], y: point[1], z: point[2] }, 1500)
-                .easing(TWEEN.Easing.Exponential.InOut)
-                .yoyo(true)
-                .repeat(Infinity)
-                .start()
-                .chain(second)
-        }
 
         this.group = new THREE.Group()
         this.group.add(lines, ...spheres)
         this.group.position.set(x, y, z)
         // Rotate Group 
         new TWEEN.Tween(this.group.rotation)
-            .to({ y: 2 * Math.PI }, 5000)
+            .to({ y: 2 * Math.PI }, 15000)
             .repeat(Infinity)
-        // .start()
+        .start()
     }
 }
 
